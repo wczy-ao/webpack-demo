@@ -21,27 +21,27 @@ module.exports = {
   },
   module: {
     rules: [{
-        test: /\.css$/,
-        use: [
-          "style-loader",
-          "css-loader",
-          {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions: {
-                plugins: [
-                  [
-                    'autoprefixer',
-                    {
-                      // 选项
-                    },
-                  ],
+      test: /\.css$/,
+      use: [
+        "style-loader",
+        "css-loader",
+        {
+          loader: 'postcss-loader',
+          options: {
+            postcssOptions: {
+              plugins: [
+                [
+                  'autoprefixer',
+                  {
+                    // 选项
+                  },
                 ],
-              },
+              ],
             },
           },
-        ]
-      },
+        },
+      ]
+    },
       {
         test: /\.less$/,
         use: [
@@ -51,8 +51,23 @@ module.exports = {
         ]
       },
       {
-        test: /\.js$/,
+        test: /\m?.js$/,
         loader: "babel-loader",
+        // use: [
+        //   {
+        //     loader: "babel-loader",
+        //     options: {
+        //       presets: [
+        //         [
+        //           "@babel/preset-env",
+        //           {
+        //             useBuiltIns: "usage", // 实现按需加载
+        //           }
+        //         ]
+        //       ]
+        //     }
+        //   }
+        // ],
         exclude: /node_modules/
       },
 
@@ -70,6 +85,10 @@ module.exports = {
       directory: path.join(__dirname, '/'),
     },
     port: 7777,
+    open: true,
     compress: true,
+  },
+  optimization: {
+    usedExports: true
   }
 }
