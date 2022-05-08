@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --config wk.config.js",
+    "build": "webpack --config config/pro.config.js",
+    "build:dev": "webpack --config config/dev.config.js",
     "prettier": "prettier --write .",
-    "dev": "webpack serve --config wk.config.js"
+    "dev": "webpack serve --config config/dev.config.js"
   },
   "keywords": [],
   "author": "",
@@ -25,13 +26,18 @@
     "postcss-preset-env": "^7.5.0",
     "prettier": "^2.6.2",
     "style-loader": "^3.3.1",
+    "terser-webpack-plugin": "^5.3.1",
     "webpack": "^5.48.0",
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^4.9.0"
   },
   "dependencies": {
     "less": "^4.1.2",
-    "postcss": "^8.4.13"
+    "moment": "^2.29.3",
+    "postcss": "^8.4.13",
+    "uglify-js": "^3.15.4",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack-merge": "^5.8.0"
   },
   "browserslist": [
     "last 2 version",

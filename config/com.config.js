@@ -1,10 +1,12 @@
+// 两个环境通用配置
 const path = require('path')
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {
   CleanWebpackPlugin
 } = require('clean-webpack-plugin');
-
+const TerserPlugin = require("terser-webpack-plugin");
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const webpack = require('webpack')
 
 module.exports = {
@@ -15,9 +17,9 @@ module.exports = {
   entry: "./src/index.js",
   // 指定出口文件
   output: {
-    path: path.resolve(__dirname, './build'), // 绝对路径,
+    path: path.resolve(__dirname, '../build'), // 绝对路径,
     publicPath: "/",
-    filename: 'boundle.js'
+    filename: '[name].js'
   },
   module: {
     rules: [{
@@ -78,7 +80,14 @@ module.exports = {
       template: './index.html'
     }),
     new CleanWebpackPlugin(),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.IgnorePlugin({
+      resourceRegExp: /^\.\/locale$/,
+      contextRegExp: /moment$/
+    }),
+
+
+
   ],
   devServer: {
     static: {
@@ -89,6 +98,34 @@ module.exports = {
     compress: true,
   },
   optimization: {
-    usedExports: true // tree shaking
+    // usedExports: true // tree shaking
+    minimize: true, //这个可以压缩loader代码 https://webpack.docschina.org/migrate/3/#uglifyjsplugin-minimize-loaders
+    minimizer: [new TerserPlugin({
+        test: /moment/,
+      }),
+      new UglifyJsPlugin({
+        compress: {
+          warnings: false
+        }
+      })
+    ],
+    splitChunks: {
+      chunks: 'all',
+      minSize: 30, //提取出的chunk的最小大小
+      cacheGroups: {
+        default: {
+          name: 'common',
+          chunks: 'initial',
+          minChunks: 1, //模块被引用2次以上的才抽离
+          priority: -20
+        },
+        vendors: { //拆分第三方库（通过npm|yarn安装的库）
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendor',
+          chunks: 'initial',
+          priority: -10
+        }
+      }
+    }
   }
 }

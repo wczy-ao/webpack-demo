@@ -1,5 +1,11 @@
-import { add, priceFormat } from './js/math.js'
+import {
+  add,
+  priceFormat
+} from './js/math.js'
 
+// const mom = () => import('moment')
+import moment from 'moment'
+moment.locale('zh-cn');
 // import "./js/element";
 // import "@babel/polyfill";
 
