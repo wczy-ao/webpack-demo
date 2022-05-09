@@ -387,8 +387,20 @@ plugins: [
 
 - 生产环境 `treeshaking`
 
-- 压缩代码
+- 压缩代码 `TerserPlugin`
+
+- gzip压缩 `CompressionPlugin` 
 
   
 
 #### 打包速度
+
+- 多进程打包 `TerserPlugin` `happyPack` `ParallelUglifyPlugin`  
+
+- DLL
+
+#### 网页加载速度
+
+- 分包 `splitChunks`
+- 小图片使用 `url-loader`
+- output 输出文件名使用 hash值、以免后续的上线重新下载资源

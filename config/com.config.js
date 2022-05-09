@@ -1,32 +1,32 @@
 // 两个环境通用配置
 const path = require('path')
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const {
-  CleanWebpackPlugin
-} = require('clean-webpack-plugin');
-const TerserPlugin = require("terser-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const CompressionPlugin = require("compression-webpack-plugin");
 const webpack = require('webpack')
 
 module.exports = {
-  mode: "development",
+  mode: 'development',
   target: 'web',
   // devtool: "eval-source-map",
   // 指定入口文件
-  entry: "./src/index.js",
+  entry: './src/index.js',
   // 指定出口文件
   output: {
     path: path.resolve(__dirname, '../build'), // 绝对路径,
-    publicPath: "/",
+    publicPath: '/',
     filename: '[name].js'
   },
   module: {
-    rules: [{
+    rules: [
+      {
         test: /\.css$/,
         use: [
-          "style-loader",
-          "css-loader",
+          'style-loader',
+          'css-loader',
           {
             loader: 'postcss-loader',
             options: {
@@ -36,25 +36,21 @@ module.exports = {
                     'autoprefixer',
                     {
                       // 选项
-                    },
-                  ],
-                ],
-              },
-            },
-          },
+                    }
+                  ]
+                ]
+              }
+            }
+          }
         ]
       },
       {
         test: /\.less$/,
-        use: [
-          "style-loader",
-          "css-loader",
-          "less-loader"
-        ]
+        use: ['style-loader', 'css-loader', 'less-loader']
       },
       {
         test: /\m?.js$/,
-        loader: "babel-loader",
+        loader: 'babel-loader',
         // use: [
         //   {
         //     loader: "babel-loader",
@@ -71,8 +67,7 @@ module.exports = {
         //   }
         // ],
         exclude: /node_modules/
-      },
-
+      }
     ]
   },
   plugins: [
@@ -85,28 +80,27 @@ module.exports = {
       resourceRegExp: /^\.\/locale$/,
       contextRegExp: /moment$/
     }),
-
-
-
+    new CompressionPlugin({
+      test: /\.js(\?.*)?$/i,
+      algorithm: "gzip",
+      deleteOriginalAssets: true
+    })
   ],
   devServer: {
     static: {
-      directory: path.join(__dirname, '/'),
+      directory: path.join(__dirname, '/')
     },
     port: 7777,
     open: true,
-    compress: true,
+    compress: true
   },
   optimization: {
     // usedExports: true // tree shaking
     minimize: true, //这个可以压缩loader代码 https://webpack.docschina.org/migrate/3/#uglifyjsplugin-minimize-loaders
-    minimizer: [new TerserPlugin({
+    minimizer: [
+      new TerserPlugin({
         test: /moment/,
-      }),
-      new UglifyJsPlugin({
-        compress: {
-          warnings: false
-        }
+        parallel: true
       })
     ],
     splitChunks: {
@@ -119,7 +113,8 @@ module.exports = {
           minChunks: 1, //模块被引用2次以上的才抽离
           priority: -20
         },
-        vendors: { //拆分第三方库（通过npm|yarn安装的库）
+        vendors: {
+          //拆分第三方库（通过npm|yarn安装的库）
           test: /[\\/]node_modules[\\/]/,
           name: 'vendor',
           chunks: 'initial',
